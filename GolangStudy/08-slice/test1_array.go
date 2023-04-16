@@ -39,4 +39,5 @@ func main() {
 	for index, value := range myArray3 {
 		fmt.Println("index = ", index, ", value = ", value)
 	}
+
 }
