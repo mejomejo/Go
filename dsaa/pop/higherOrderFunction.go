@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func addn(n int) func(x int) int {
 	fun := func(x int) int {
@@ -10,8 +13,13 @@ func addn(n int) func(x int) int {
 }
 
 func main() {
-	add3 := addn(3)
-	fmt.Println(add3(100))
-	fmt.Println(add3(200))
-	fmt.Println(add3(300))
+	square := make1(3)
+	fmt.Println(square(4))
+}
+
+func make1(n float64) func(x float64) float64 {
+	fun := func(x float64) float64 {
+		return math.Pow(x, n)
+	}
+	return fun
 }

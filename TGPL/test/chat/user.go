@@ -65,7 +65,23 @@ func (this *User) DoMessage(msg string) {
 			this.SendMsg("该用户名已经被使用\n")
 			return
 		}
+		this.server.mapLock.Lock()
+		delete(this.server.Onlinemap, this.Name)
+		this.server.Onlinemap[newname] = this
+		this.server.mapLock.Unlock()
+
 		this.Name = newname
+		return
+	}
+	if strings.HasPrefix(msg, "/@") {
+		val := strings.Split(msg, "@")[1]
+		name := strings.Split(val, " ")[0]
+		remoteuser, ok := this.server.Onlinemap[name]
+		if !ok {
+			this.SendMsg("该用户不存在")
+			return
+		}
+		remoteuser.SendMsg(this.Name + "对您说" + strings.Split(val, " ")[1])
 		return
 	}
 
