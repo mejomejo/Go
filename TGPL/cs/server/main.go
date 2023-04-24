@@ -15,7 +15,7 @@ func main() {
 	conn, err1 := listener.Accept()
 
 	for {
-		if err1 != nil {
+		if err1 != nil { 
 			fmt.Println("Failed to connect")
 		} else {
 			fmt.Println("Connected successfully... conn", conn)
