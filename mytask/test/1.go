@@ -63,12 +63,12 @@ func get(i int) {
 	for index, title := range titles {
 		fmt.Println(strings.Split(title[1], "-")[0], where[makeindex(index)][1])
 	}
-	//ch <- i + 1
+	// ch <- i + 1
 	mainch <- 0
 }
 
 func makeindex(i int) int {
-	if i == 0 {
+	if i%2 == 0 {
 		return i
 	}
 	return i + 1

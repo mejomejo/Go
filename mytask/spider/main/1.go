@@ -12,16 +12,13 @@ var mainch = make(chan int)
 func main() {
 
 	var URL string
-	// for i := 0; i < 250; i += 25 {
-	// 	URL = fmt.Sprintf("http://douban.com/movie/top250?start=%d", i)
-	// 	go output(URL)
-	// }
-	// for i := 0; i < 100; i++ {
-	// 	<-mainch
-	// }
-	URL = "https://spa5.scrape.center/"
-
-	fmt.Println(fetch(URL))
+	for i := 0; i < 250; i += 25 {
+		URL = fmt.Sprintf("http://douban.com/movie/top250?start=%d", i)
+		go output(URL)
+	}
+	for i := 0; i < 10; i++ {
+		<-mainch
+	}
 }
 
 func fetch(URL string) string {
