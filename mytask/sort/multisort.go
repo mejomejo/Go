@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-var ARRLEN = 100000
+var ARRLEN = 10000000
 var EXTENT = 10000
-var MAXGO = 40
+var MAXGO = 90
 var ch = make(chan []int)
 var returnch = make(chan int)
 var res [][]int
@@ -89,7 +89,7 @@ func merge(test [][]int) {
 		<-ch
 	}
 
-	res := make([]int, len(test)*len(test[0]))
+	res := make([]int, ARRLEN)
 	i := 0
 	for _, val := range test {
 		copy(res[i:], val)

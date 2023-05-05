@@ -3,15 +3,16 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 	"time"
 )
 
-var ARRLEN = 100000
+var ARRLEN = 10000000
 var EXTENT = 10000
 
 func main() {
 	a := randarr()
-	quickSort(a)
+	sort.Ints(a)
 	fmt.Println(a)
 }
 

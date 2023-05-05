@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 )
 
-var mainch = make(chan int)
+var mainch = make(chan string)
 
 func main() {
 
@@ -16,8 +16,8 @@ func main() {
 		URL = fmt.Sprintf("http://douban.com/movie/top250?start=%d", i)
 		go output(URL)
 	}
-	for i := 0; i < 10; i++ {
-		<-mainch
+	for i := range mainch {
+		fmt.Println(i)
 	}
 }
 
@@ -38,7 +38,7 @@ func fetch(URL string) string {
 	}
 	defer resp.Body.Close()
 
-	body, err2 := ioutil.ReadAll(resp.Body)
+	body, err2 := io.ReadAll(resp.Body)
 	if err2 != nil {
 		fmt.Println(err2)
 		return ""
@@ -52,7 +52,7 @@ func output(URL string) {
 	title := handler1.FindAllStringSubmatch(res, -1)
 
 	for _, val := range title {
-		fmt.Println(val[1])
+		mainch <- val[1]
 	}
-	mainch <- 0
+	close(mainch)
 }

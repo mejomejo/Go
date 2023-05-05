@@ -3,15 +3,21 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strings"
 )
 
+type Spider struct {
+	url   string
+	Maxgo int
+	Depth int
+}
+
 var mainch = make(chan int)
 
-var ch = make(chan int, 1)
+var ch = make(chan int, 8)
 
 func main() {
 
@@ -19,8 +25,19 @@ func main() {
 	// 	ch <- 1
 	// }()
 
+	aaa := &Spider{
+		url:   "https://ssr1.scrape.center/page/",
+		Maxgo: 5,
+		Depth: 1,
+	}
+
 	for i := 1; i <= 11; i++ {
-		go get(i)
+		if aaa.Maxgo > 0 {
+			go get(aaa, i)
+			aaa.Maxgo--
+		} else {
+			get(aaa, i)
+		}
 	}
 	for i := 0; i < 11; i++ {
 		<-mainch
@@ -28,7 +45,7 @@ func main() {
 	// <-ch
 }
 
-func get(i int) {
+func get(aaa *Spider, i int) {
 
 	// for {
 	// 	t := <-ch
@@ -40,7 +57,7 @@ func get(i int) {
 	// 	}
 	// }
 
-	url := fmt.Sprintf("https://ssr1.scrape.center/page/%d", i)
+	url := fmt.Sprintf(aaa.url+"%d", i)
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -52,7 +69,9 @@ func get(i int) {
 	}
 	defer resp.Body.Close()
 
-	content, err := ioutil.ReadAll(resp.Body)
+	aaa.Maxgo++
+
+	content, err := io.ReadAll(resp.Body)
 
 	handler1 := regexp.MustCompile(`"m-b-sm">(.*?)</h2>`)
 	titles := handler1.FindAllStringSubmatch(string(content), -1)
@@ -63,8 +82,12 @@ func get(i int) {
 	for index, title := range titles {
 		fmt.Println(strings.Split(title[1], "-")[0], where[makeindex(index)][1])
 	}
-	// ch <- i + 1
-	mainch <- 0
+	// go func() {
+	// 	ch <- i + 1
+	// }()
+	go func() {
+		mainch <- 0
+	}()
 }
 
 func makeindex(i int) int {
