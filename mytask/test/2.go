@@ -3,7 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strings"
@@ -29,7 +29,7 @@ func get(i int) {
 	}
 	defer resp.Body.Close()
 
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 
 	handler1 := regexp.MustCompile(`"m-b-sm">(.*?)</h2>`)
 	titles := handler1.FindAllStringSubmatch(string(content), -1)

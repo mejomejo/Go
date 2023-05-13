@@ -5,20 +5,34 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"sync"
 )
 
 var mainch = make(chan string)
+var wg sync.WaitGroup
 
-func main() {
+var stop = make(chan bool)
+
+func //main() {
 
 	var URL string
+	wg.Add(10)
 	for i := 0; i < 250; i += 25 {
 		URL = fmt.Sprintf("http://douban.com/movie/top250?start=%d", i)
 		go output(URL)
 	}
-	for i := range mainch {
-		fmt.Println(i)
-	}
+
+	go func() {
+		for i := range mainch {
+			fmt.Println(i)
+		}
+		stop <- true
+	}()
+
+	wg.Wait()
+	close(mainch)
+	<-stop
+	fmt.Println("Done!")
 }
 
 func fetch(URL string) string {
@@ -47,6 +61,7 @@ func fetch(URL string) string {
 }
 
 func output(URL string) {
+
 	res := fetch(URL)
 	handler1 := regexp.MustCompile(`<img width="100" alt="(?s:(.*?))"`)
 	title := handler1.FindAllStringSubmatch(res, -1)
@@ -54,5 +69,6 @@ func output(URL string) {
 	for _, val := range title {
 		mainch <- val[1]
 	}
-	close(mainch)
+
+	wg.Done()
 }

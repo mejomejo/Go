@@ -14,9 +14,10 @@ var stop = make(chan bool)
 
 func main() {
 
-	url := "https://speed.hetzner.de/100MB.bin"
+	url := "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/11698/wps-office_11.1.0.11698_amd64.deb"
 
-	//QQ音乐："https://dldir1.qq.com/music/clntupate/QQMusic_YQQDLPage.exe"
+	//QQ音乐："https://dldir1.qq.com/music/clntupate/linux/deb/qqmusic_1.1.5_amd64.deb"
+	// "https://speed.hetzner.de/100MB.bin"
 
 	// 获取文件大小
 	resp, err := http.Head(url)
@@ -36,7 +37,7 @@ func main() {
 
 	threads := 10
 
-	f, err := os.Create("downloaded_file")
+	f, err := os.Create("wps-office_11.1.0.11698_amd64.deb")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return

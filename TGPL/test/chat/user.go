@@ -78,10 +78,10 @@ func (this *User) DoMessage(msg string) {
 		name := strings.Split(val, " ")[0]
 		remoteuser, ok := this.server.Onlinemap[name]
 		if !ok {
-			this.SendMsg("该用户不存在")
+			this.SendMsg("该用户不存在\n")
 			return
 		}
-		remoteuser.SendMsg(this.Name + "对您说" + strings.Split(val, " ")[1])
+		remoteuser.SendMsg(this.Name + "对您说：\n" + strings.Split(val, " ")[1] + "\n")
 		return
 	}
 
