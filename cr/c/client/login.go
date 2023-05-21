@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"time"
 )
 
 func login(userId int, userPwd string) (err error) {
@@ -45,8 +46,7 @@ func login(userId int, userPwd string) (err error) {
 	}
 
 	//向服务器发送
-	var pkgLen uint32
-	pkgLen = uint32(len(data))
+	var pkgLen uint32 = uint32(len(data))
 	var bytes [4]byte
 	binary.BigEndian.PutUint32(bytes[:], pkgLen)
 
@@ -58,6 +58,14 @@ func login(userId int, userPwd string) (err error) {
 	}
 
 	fmt.Printf("客户端发送成功\n内容：%s\n长度：%d\n", string(data), len(data))
+
+	_, err = c.Write(data)
+	if err != nil {
+		fmt.Println("Write()", err)
+		return
+	}
+
+	time.Sleep(5 * time.Second)
 
 	return
 }
