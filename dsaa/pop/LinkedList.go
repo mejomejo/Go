@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type MyLinkedList[T any] struct {
 	sentinal Node[T]
@@ -20,12 +22,11 @@ func (this *MyLinkedList[T]) Add(Val T) {
 }
 
 func (this *MyLinkedList[T]) Del(Val T) T {
-	if this.isEmpty() {
+	return this.sentinal.Val
 
-	}
 }
 
-func (this *MyLinkedList[T]) Isempty() bool {
+func (this *MyLinkedList[T]) IsEmpty() bool {
 	return this.sentinal.Next == nil
 }
 
