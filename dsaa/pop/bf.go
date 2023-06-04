@@ -22,7 +22,6 @@ func bf(a, b string) int {
 func main() {
 	a := "abacadeabcfejjiiu"
 	b := "bcfejj"
-	fmt.Println(a[0])
 	c := bf(a, b)
 	fmt.Println(c)
 }
